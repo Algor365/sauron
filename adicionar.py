@@ -1,11 +1,16 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 import re
+import os
 
 app = Flask(__name__)
 
 # Conexão com o MongoDB Atlas
-client = MongoClient("mongodb+srv://carlosdenobrega9988:huSYKtnGRLp3CG7H@sauron.qpue9bn.mongodb.net/?retryWrites=true&w=majority&appName=sauron")
+mongo_uri = os.getenv('MONGO_URI')
+if not mongo_uri:
+    raise Exception("Variável MONGO_URI não configurada")
+
+client = MongoClient(mongo_uri)
 db = client.sauron
 colecao = db.minha_colecao
 
@@ -45,4 +50,4 @@ def deletar(nome):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
